@@ -302,3 +302,8 @@ Der FADELogger zeigt dir in Echtzeit:
 * [ ] Diagramm zur Datenflusskette (CUDA→ZLUDA→HIP→FADE) 
 * [ ] Optionale Verbindung zu `strace`, `dlopen`-Tracer oder Symbol-Debugger 
 ---
+
+## 📄 License
+
+This project is licensed under the [MIT License](./LICENSE)  
+© 2025 Painter3000 (michael.w.kuebel@web.de)
