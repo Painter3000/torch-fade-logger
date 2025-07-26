@@ -311,3 +311,8 @@ FADELogger helps you answer:
 
 ---
 
+## 📄 License
+
+This project is licensed under the [MIT License](./LICENSE)  
+© 2025 Painter3000 (michael.w.kuebel@web.de)
+
