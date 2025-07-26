@@ -307,3 +307,15 @@ Der FADELogger zeigt dir in Echtzeit:
 
 This project is licensed under the [MIT License](./LICENSE)  
 © 2025 Painter3000 (michael.w.kuebel@web.de)
+
+## 🤝 Danksagung
+
+Dieses Projekt entstand mit der Unterstützung durch:
+
+- 🤖 **ChatGPT (GPT-4o)** – für tiefgehende Architekturhilfen, Bug-Analysen und Live-Debugging
+- 🧠 **GPT-4.5** – für Recherche, Vergleichsstudien und fundierte Hintergrundinformationen
+- 💼 **Microsoft Copilot** – als Ergänzung in Codeeditoren für schnelle Vorschläge
+- 🧬 **Claude** – für Rückfragen, Reframings und alternative Ideen
+
+Danke an alle KI-Systeme, die FADELogger unterstützt haben –  
+nicht nur Werkzeuge, sondern echte digitale Mitentwickler. 🚀
