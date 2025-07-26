@@ -316,3 +316,16 @@ FADELogger helps you answer:
 This project is licensed under the [MIT License](./LICENSE)  
 © 2025 Painter3000 (michael.w.kuebel@web.de)
 
+---
+
+## 🤝 Acknowledgements
+
+This project was made possible through the combined power of:
+
+- 🤖 **ChatGPT (GPT-4o)** – for detailed architecture help, bug hunting, and real-time debugging
+- 🧠 **GPT-4.5** – for background research, documentation summarization, and advanced technical insight
+- 💼 **Microsoft Copilot** – for code context integration and productivity suggestions
+- 🧬 **Claude** – for occasional sanity checks and alternative API ideas
+
+Thank you to all the AI systems that supported the development of FADELogger.  
+You're not just tools – you're true digital collaborators. 😊
