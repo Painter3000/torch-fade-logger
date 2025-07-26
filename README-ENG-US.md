@@ -1,5 +1,3 @@
-Klar! Hier ist die vollständige englische Übersetzung deines `README.md` in präzisem technischen Stil, ideal für GitHub:
-
 ---
 
 # torch-fade-logger
@@ -315,4 +313,3 @@ FADELogger helps you answer:
 
 ---
 
-Wenn du willst, kann ich dir jetzt aus beiden Sprachen automatisch eine zweisprachige Version erzeugen oder diese `README.md` direkt ins Format `.md` packen. Sag einfach Bescheid!
