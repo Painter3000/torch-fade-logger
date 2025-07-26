@@ -308,6 +308,8 @@ Der FADELogger zeigt dir in Echtzeit:
 This project is licensed under the [MIT License](./LICENSE)  
 © 2025 Painter3000 (michael.w.kuebel@web.de)
 
+---
+
 ## 🤝 Danksagung
 
 Dieses Projekt entstand mit der Unterstützung durch:
