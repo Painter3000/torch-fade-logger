@@ -61,7 +61,7 @@ Our patch intercepts the HIP device property detection and corrects the `multiPr
 
 2. **Download and apply the fix**:
    ```bash
-   wget https://raw.githubusercontent.com/Painter3000/torch-fade-logger/main/fade_amd_cu_fix.sh
+   wget https://raw.githubusercontent.com/Painter3000/torch-fade-logger/main/pytorch/fade_amd_cu_fix.sh
    chmod +x fade_amd_cu_fix.sh
    ./fade_amd_cu_fix.sh
    ```
@@ -69,6 +69,10 @@ Our patch intercepts the HIP device property detection and corrects the `multiPr
 3. **Build PyTorch**:
    ```bash
    python setup.py develop
+   ```
+   💡 **Or use Build with ROCm **:
+   ```bash 
+   ./build_rocm_v2.9.sh 
    ```
 
 4. **Verify the fix**:
@@ -193,7 +197,7 @@ We welcome contributions! Help us support more AMD GPUs:
 
 ```bash
 # Clone this repo
-git clone https://github.com/YOUR_USERNAME/torch-fade-logger.git
+git clone https://github.com/Painter3000/torch-fade-logger.git
 cd torch-fade-logger
 
 # Test the patch script
@@ -206,7 +210,7 @@ This fix is part of the [FADE (Framework for AMD Device Enhancement)](https://gi
 
 ### Related Projects
 
-- 🔍 **[FADELogger](https://github.com/YOUR_USERNAME/torch-fade-logger)**: Runtime GPU validation and debugging
+- 🔍 **[FADELogger](https://github.com/Painter3000/torch-fade-logger)**: Runtime GPU validation and debugging
 - ⚡ **DPP8 Kernels**: Custom RDNA2 tensor operations (coming soon)
 - 🛠️ **ZLUDA Integration**: CUDA-to-HIP translation improvements
 
