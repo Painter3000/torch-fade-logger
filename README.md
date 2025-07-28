@@ -240,7 +240,8 @@ python3 tools/amd_build/build_amd.py
 ./fade_amd_cu_fix.sh
 ```
 **What this Patch does:**
-✨ Our patch intercepts the HIP device property detection and corrects the `multiProcessorCount` for affected GPUs.
+
+* ✨ Our patch intercepts the HIP device property detection and corrects the `multiProcessorCount` for affected GPUs.
 
 ---
 
