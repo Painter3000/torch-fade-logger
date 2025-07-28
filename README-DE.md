@@ -4,7 +4,8 @@ Runtime GPU Validator for PyTorch on ZLUDA/ROCm
 * Linux Mint 21.2 - Victoria / Ubuntu 22.04 LTS 
 * Hardware-Referenz (RDNA2 RX 6800 XT) 
 * Docker-Workflow inkl. Nachinstallation der Dev-Pakete 
-* richtigen Ablauf zwischen `build_amd.py` und Logger-Patch 
+* richtigen Ablauf zwischen `build_amd.py` und Logger-Patch
+* Installation FADELogger und/oder nur den Patch (fade_amd_cu_fix.sh)
 * CMake-Anpassung in `build_rocm_v2.9.sh`
 ---
 
@@ -170,7 +171,7 @@ Damit wird der Container nicht nur einfach gestartet, sondern bekommt gezielt Zu
 * `PYTORCH_ROCM_ARCH=gfx1030` ist angepasst für **RX 6800 XT (RDNA2)**. Für andere Karten ggf. `gfx1031`, `gfx1100`, etc. wählen. 
 * Optional kann im Dockerfile direkt `git clone https://github.com/pytorch/pytorch` eingefügt werden – aber besser manuell ausführt, falls Forks oder Branches genutzt werden. 
 
-💡Nützliche Docker- Befehle aus Host-Terminal: 
+💡 Nützliche Docker- Befehle aus Host-Terminal: 
 ```bash 
 docker ps -a
 ```
@@ -229,6 +230,15 @@ python3 tools/amd_build/build_amd.py
 * 🧠 Instrumentierung für `hipMalloc`, `hipLaunchKernel`, `hipMemcpy`, `hipStreamSynchronize`, ... 
 * 🔍 Optional: Log-Auswertungsskript `fade_log_analyzer.py` wird erzeugt 
 
+
+**Installation AMD-CU-fix-Patch:** 
+```bash 
+./fade_amd_cu_fix.sh 
+``` 
+
+**Was passiert dabei?**
+
+* 💡 Dieser Patch fängt die Erkennung der HIP-Geräteeigenschaften ab und korrigiert den „multiProcessorCount“ für betroffene GPUs (z.B. CU's=36? -> 72!).
 --- 
 
 
