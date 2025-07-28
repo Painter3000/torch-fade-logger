@@ -6,6 +6,7 @@ Runtime GPU Validator for PyTorch on ZLUDA/ROCm
 * Hardware Reference: AMD RX 6800 XT (RDNA2)
 * Docker workflow with post-installation of dev packages
 * Correct build order: `build_amd.py` **before** logger patch
+* Install FADELogger and/or only the Patch (fade_amd_cu_fix.sh)
 * CMake customization in `build_rocm_v2.9.sh`
 
 ---
@@ -220,7 +221,7 @@ python3 tools/amd_build/build_amd.py
 
 ---
 
-## 🚀 Install FADELogger
+## 🚀 Install FADELogger and / or only the Patch
 
 ```bash
 ./fade_hip_logger_full_setup.sh
@@ -232,6 +233,14 @@ python3 tools/amd_build/build_amd.py
 * 🧩 Patches CMakeLists.txt
 * 🧠 Adds hooks for `hipMalloc`, `hipLaunchKernel`, `hipMemcpy`, etc.
 * 🔍 Optionally creates log analyzer script: `fade_log_analyzer.py`
+
+**The AMD-CU-fix-Patch**
+
+```bash
+./fade_amd_cu_fix.sh
+```
+**What this Patch does:**
+✨ Our patch intercepts the HIP device property detection and corrects the `multiProcessorCount` for affected GPUs.
 
 ---
 
