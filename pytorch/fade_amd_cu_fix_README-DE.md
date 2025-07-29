@@ -6,7 +6,7 @@
 [![GPU: AMD RDNA2](https://img.shields.io/badge/GPU-AMD_RDNA2-red.svg)](https://www.amd.com/en/graphics/rdna-2)
 [![PyTorch: 2.8+](https://img.shields.io/badge/PyTorch-2.8+-orange.svg)](https://pytorch.org/)
 
-*[🇺🇸 English Version](README.md) | 🇩🇪 Deutsche Version*
+*[🇺🇸 English Version](fade_amd_cu_fix_README-ENG-US.md) | 🇩🇪 Deutsche Version*
 
 ## 🚨 Das Problem
 
