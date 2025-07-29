@@ -1,6 +1,7 @@
 # torch-fade-logger
 
 Runtime GPU Validator for PyTorch on ZLUDA/ROCm
+*[🇩🇪 Deutsche Version](README-DE.md) | 🇺🇸 English Version*
 
 * Linux Mint 21.2 – Victoria / Ubuntu 22.04 LTS
 * Hardware Reference: AMD RX 6800 XT (RDNA2)
