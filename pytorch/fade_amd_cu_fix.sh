@@ -63,24 +63,94 @@ fi
 
 echo -e "${BLUE}🔧 Applying FADE patch...${NC}"
 
-# Apply the patch using sed
-# We need to be careful with the multiline replacement
+# Detect actual CU count from rocminfo
+echo -e "${BLUE}🔍 Detecting actual CU count from rocminfo...${NC}"
+CU_COUNT=$(rocminfo | grep -A5 "Name: gfx" | grep "Compute Unit" | head -n1 | grep -o '[0-9]\+')
+
+if [ -z "$CU_COUNT" ]; then
+    echo -e "${YELLOW}⚠️  Could not detect CU count from rocminfo, using static RX 6800 XT fix (72 CUs)${NC}"
+    USE_STATIC_FIX=true
+else
+    echo -e "${GREEN}✅ Detected ${CU_COUNT} Compute Units from hardware${NC}"
+    USE_STATIC_FIX=false
+fi
+
+# Choose patch method based on user preference and detection
+echo -e "${BLUE}🛠️  Choose patch method:${NC}"
+echo -e "${BLUE}   1) Dynamic fix (auto-detect CU count from rocminfo)${NC}"
+echo -e "${BLUE}   2) Static fix (hardcoded RX 6800 XT: 36→72)${NC}"
+echo -e "${BLUE}   3) Wrapper method (override hipGetDeviceProperties)${NC}"
+
+read -p "Select method [1-3]: " PATCH_METHOD
+
+case $PATCH_METHOD in
+    1)
+        if [ "$USE_STATIC_FIX" = true ]; then
+            echo -e "${RED}❌ Cannot use dynamic fix without rocminfo detection${NC}"
+            exit 1
+        fi
+        echo -e "${BLUE}🔧 Applying dynamic CU fix (${CU_COUNT} CUs)...${NC}"
+        ;;
+    2)
+        echo -e "${BLUE}🔧 Applying static RX 6800 XT fix (72 CUs)...${NC}"
+        ;;
+    3)
+        echo -e "${BLUE}🔧 Applying wrapper method...${NC}"
+        ;;
+    *)
+        echo -e "${RED}❌ Invalid selection${NC}"
+        exit 1
+        ;;
+esac
+
+# Pass environment variables to Python
+export PATCH_METHOD
+export CU_COUNT
+
+# Apply the patch using Python
 python3 << 'EOF'
 import re
+import os
 
 # Read the file
 with open('./aten/src/ATen/hip/HIPContext.cpp', 'r') as f:
     content = f.read()
 
-# Define the original pattern to match
-original_pattern = r'''void initDeviceProperty\(DeviceIndex device_index\) \{
+# Get patch method from environment
+patch_method = os.environ.get('PATCH_METHOD', '2')
+cu_count = os.environ.get('CU_COUNT', '72')
+
+if patch_method == '1':
+    # Dynamic fix using rocminfo-detected CU count
+    original_pattern = r'''void initDeviceProperty\(DeviceIndex device_index\) \{
   hipDeviceProp_t device_prop\{\};
   AT_CUDA_CHECK\(hipGetDeviceProperties\(&device_prop, device_index\)\);
   device_properties\[device_index\] = device_prop;
 \}'''
 
-# Define the replacement
-replacement = '''void initDeviceProperty(DeviceIndex device_index) {
+    replacement = f'''void initDeviceProperty(DeviceIndex device_index) {{
+  hipDeviceProp_t device_prop{{}};
+  AT_CUDA_CHECK(hipGetDeviceProperties(&device_prop, device_index));
+  
+  // FADE PATCH: Dynamic CU fix based on rocminfo detection
+  // Detected hardware CU count: {cu_count}
+  if (device_prop.multiProcessorCount < {cu_count}) {{
+    FADE_LOG("DEVICE", "Fixed multiProcessorCount: %d -> {cu_count} (auto-detected)", device_prop.multiProcessorCount);
+    device_prop.multiProcessorCount = {cu_count};
+  }}
+  
+  device_properties[device_index] = device_prop;
+}}'''
+
+elif patch_method == '2':
+    # Static RX 6800 XT fix
+    original_pattern = r'''void initDeviceProperty\(DeviceIndex device_index\) \{
+  hipDeviceProp_t device_prop\{\};
+  AT_CUDA_CHECK\(hipGetDeviceProperties\(&device_prop, device_index\)\);
+  device_properties\[device_index\] = device_prop;
+\}'''
+
+    replacement = '''void initDeviceProperty(DeviceIndex device_index) {
   hipDeviceProp_t device_prop{};
   AT_CUDA_CHECK(hipGetDeviceProperties(&device_prop, device_index));
   
@@ -94,7 +164,44 @@ replacement = '''void initDeviceProperty(DeviceIndex device_index) {
   device_properties[device_index] = device_prop;
 }'''
 
-# Apply the replacement
+elif patch_method == '3':
+    # Wrapper method - add at top of file
+    include_pattern = r'(#include "c10/hip/fade_logger\.h")'
+    wrapper_code = '''
+// FADE PATCH: Wrapper function for hipGetDeviceProperties
+static hipError_t FADE_hipGetDeviceProperties(hipDeviceProp_t* prop, int device_id) {
+    hipError_t status = hipGetDeviceProperties(prop, device_id);
+    if (status == hipSuccess) {
+        // Auto-fix known broken CU counts
+        if (prop->multiProcessorCount == 36 && strstr(prop->name, "RX 6800 XT") != nullptr) {
+            FADE_LOG("DEVICE", "FADE Wrapper: Fixed multiProcessorCount 36 -> 72 for RX 6800 XT");
+            prop->multiProcessorCount = 72;
+        }
+        // Add more GPU fixes here as needed
+    }
+    return status;
+}
+
+// Override hipGetDeviceProperties with our wrapper
+#define hipGetDeviceProperties FADE_hipGetDeviceProperties
+
+'''
+    
+    # Add wrapper after fade_logger include
+    new_content = re.sub(include_pattern, r'\1' + wrapper_code, content)
+    
+    if new_content == content:
+        print("❌ Could not find include pattern for wrapper method")
+        exit(1)
+    
+    # Write the modified content back
+    with open('./aten/src/ATen/hip/HIPContext.cpp', 'w') as f:
+        f.write(new_content)
+    
+    print("✅ Wrapper method applied successfully")
+    exit(0)
+
+# Apply the replacement for methods 1 and 2
 new_content = re.sub(original_pattern, replacement, content, flags=re.MULTILINE | re.DOTALL)
 
 if new_content == content:
