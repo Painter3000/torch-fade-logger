@@ -16,7 +16,8 @@ Runtime GPU Validator for PyTorch on ZLUDA/ROCm
     └── pytorch
           ├── build_rocm_v2.9.sh
           ├── fade_amd_cu_fix.sh
-          ├── fade_amd_cu_fix_README.md
+          ├── fade_amd_cu_fix_README-DE.md
+          ├── fade_amd_cu_fix_README-ENG-US.md
           └── fade_hip_logger_full_setup.sh
 ```
 💡 Alle benötigten Dateien, sowie dazugehörige Ordner werden mittels Skript erzeugt!
