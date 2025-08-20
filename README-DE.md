@@ -76,6 +76,7 @@ ENV MAX_JOBS=4
 # System-Updates und Abhängigkeiten installieren
 RUN apt-get update && apt-get install -y \
   apt-utils \
+  rocm-hip-runtime \
   hipsolver-dev \
   rocthrust-dev \
   hipcub-dev \
@@ -194,7 +195,8 @@ apt-get update && apt-get install -y \
   rocrand-dev rccl-dev rocfft-dev \
   hipblas-dev hipfft-dev hipsparse-dev \
   rocprim-dev hipcub-dev rocthrust-dev \
-  hipsolver-dev hipsparselt-dev
+  hipsolver-dev hipsparselt-dev \
+  rocm-hip-runtime
 ```
 
 ---
